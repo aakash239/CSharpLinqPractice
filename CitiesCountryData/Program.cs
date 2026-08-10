@@ -151,5 +151,15 @@ class Program
             //     Category = cat,
             //     Name = prod.Name
             // };
+
+        // the let clause allows us to store the result of an expression, such as a method call, in a new variable.
+        // useful when we want to use a calculation again in that query
+
+        var denseCountries =
+            from country in countries
+            let density = country.Population / country.Area
+            where density > 100_000
+            select new { country.Name, Density = density };
+        // let is used for creating a field that will be used again while into is used to continue query after groupby so we can select on it.
     }
 }
