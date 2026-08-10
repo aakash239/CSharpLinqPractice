@@ -87,25 +87,69 @@ class Program
         //     Console.WriteLine(city);
         // }
 
-        //groupClause
-        var queryCounryGroups = from country in countries
-                                group country by country.Name[0];
+        // //groupClause
+        // var queryCounryGroups = from country in countries
+        //                         group country by country.Name[0];
 
-        foreach (IGrouping<char, Country> country in queryCounryGroups)
-        {
-            Console.WriteLine($"{country.Key}");
-            foreach (var c in country)
-            {
-                Console.WriteLine($"{c.Name}, {c.Area}, {c.Population}");
-            }
-        }
+        // foreach (IGrouping<char, Country> country in queryCounryGroups)
+        // {
+        //     Console.WriteLine($"{country.Key}");
+        //     foreach (var c in country)
+        //     {
+        //         Console.WriteLine($"{c.Name}, {c.Area}, {c.Population}");
+        //     }
+        // }
 
-        var queryNameAndPop =
-            from country in countries
-            select new
-            {
-                Name = country.Name,
-                Pop = country.Population
-            };
+        // // requirement of adding a var type when select clause projects a sequence of anonymous types that contains only a subset of the field in the original element. 
+        // var queryNameAndPop =
+        //     from country in countries
+        //     select new
+        //     {
+        //         Name = country.Name,
+        //         Pop = country.Population
+        //     };
+        
+        // foreach (var item in queryNameAndPop)
+        // {
+        //     System.Console.WriteLine(item);
+        // }
+
+        // // use into keyword in a select or group clause to create a temporary identifier that stores a query
+
+        // var percentileQuery = 
+        //     from country in countries
+        //     let popInThousands = (int)country.Population / 1_000
+        //     group country by popInThousands into countryGroup
+        //     where countryGroup.Key >= 20
+        //     select countryGroup;
+
+        // foreach (var grouping in percentileQuery)
+        // {
+        //     Console.WriteLine(grouping.Key);
+        //     foreach (var country in grouping)
+        //     {
+        //         Console.WriteLine(country.Name + ":" + country.Population);
+        //     }
+        // }
+
+        // // where clause is used to filter source data based on one or more predicates
+        // // orderby to sort asc or desc
+
+        // IEnumerable<City> queryCityPop =
+        //     from city in cities
+        //     where city.Population is < 15_000_000 and > 10_000_000
+        //     orderby city.Population
+        //     select city;
+
+        // Join clause: combine two data sources based on an equality comparision between specified keys in each element
+    //     // just an example
+    //     var categoryQuery =
+            // from cat in categories
+            // join prod in products on cat equals prod.Category
+            // select new
+            // {
+            //     Category = cat,
+            //     Name = prod.Name
+            // };
     }
 }
