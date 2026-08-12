@@ -159,6 +159,7 @@ class Program
         {
             System.Console.WriteLine(item);
         }
+        System.Console.WriteLine("\n\n\n");
 
         // Question 4 b: 
         System.Console.WriteLine("Group the projects together");
@@ -181,6 +182,96 @@ class Program
                 Console.WriteLine($"  - {p.Name} ({p.HoursPerWeek} hrs/week)");
             }
         }
-                
+        System.Console.WriteLine("\n\n\n");
+        
+        
+        // Question 4 c - 
+        var employeeProjects2 = from employee in employees
+                    join assignment in assignments on employee.Id equals assignment.EmployeeId into empAssignments
+                    from ea in empAssignments.DefaultIfEmpty()
+                    join project in projects on ea?.ProjectId equals project.Id into projMatch
+                    from pm in projMatch.DefaultIfEmpty()
+                    select new
+                    {
+                        employee.Name,
+                        Project = pm?.Name ?? "No Project",
+                        hours = ea?.HoursPerWeek ?? 0
+                    };
+                    
+
+        foreach (var emp in employeeProjects2)
+        {
+            Console.WriteLine(emp);
+        }
+        System.Console.WriteLine("\n\n\n");
+
+        // Question 5
+        // System.Console.WriteLine("Get all employees with Salary > 80000, ordered by salary descending. Print name and salary.");
+
+        // Get all employees with Salary > 80000, ordered by salary descending. Print name and salary.
+        var query5 = from employee in employees
+        where employee.Salary > 80_000
+        orderby employee.Salary descending
+        select new {employee.Name, employee.Salary}; 
+
+        // Get all employees ordered by DepartmentId ascending, and within each department, by Salary descending.
+
+        var query6 = from e in employees
+            orderby e.DepartmentId, e.Salary descending
+            select e;
+
+        // Find the total salary cost per department (department name + sum of salaries of employees in it). (Hint: group by + Sum().)
+
+        var query7 = from e in employees
+            join d in departments on e.DepartmentId equals d.Id
+            group e by d.Name into g
+            select new
+            {
+                DepartmentName = g.Key,
+                TotalSalary = g.Sum(e => e.Salary)
+            };
+
+        // Find only the departments where the average employee salary exceeds 80,000. Print department name and average salary.
+
+        var query8 = from e in employees
+            join d in departments on e.DepartmentId equals d.Id
+            group e by d.Name into g
+            where g.Average(e => e.Salary) > 80_000
+            select new
+            {
+                DepartmentName = g.Key,
+                AverageSalary = g.Average(e => e.Salary) 
+            };
+        // For each project, calculate the total hours per week committed across all assigned employees (project name + total hours).
+        var query9 = from p in projects
+            join a in assignments on p.Id equals a.ProjectId 
+            group a by p.Name into g
+            select new
+            {
+                projectName = g.Key,
+                workTimeTotal = g.Sum(g => g.HoursPerWeek)
+            };
+
+        // For each department, find the single highest-paid employee (name + salary). (Hint: think about grouping, then picking the max within each group — there's more than one valid approach here.)
+
+        var query10 = from e in employees
+            join d in departments on e.DepartmentId equals d.Id
+            group new {e.Name, e.Salary} by d.Name into g
+            select new
+            {
+                DepartmentName = g.Key,
+                TopEmployee = g.OrderByDescending(x => x.Salary).First()
+            };
+
+
+        // List all employees who are not leading any project (i.e., their Id doesn't appear as any Project.LeadEmployeeId)
+
+        
+        System.Console.WriteLine("\n\n\n");
+        foreach (var item in query10)
+        {
+            System.Console.WriteLine(item);
+        }
+
     }
 }
