@@ -266,9 +266,56 @@ class Program
 
         // List all employees who are not leading any project (i.e., their Id doesn't appear as any Project.LeadEmployeeId)
 
-        
+        var query11 = from e in employees
+            join p in projects on e.Id equals p.LeadEmployeeId into ep
+            from ep_leftJoin in ep.DefaultIfEmpty()
+            where ep_leftJoin == null
+            select new
+            {
+                e.Name,
+                e.Id
+            };
+
+        // List all projects with a deadline before 2026-11-01, ordered by deadline ascending, showing project name, deadline, and the name of the lead employee (needs a join).
+        var query12 = from p in projects
+            join e in employees on p.LeadEmployeeId equals e.Id into ep
+            from e in ep
+            where p.Deadline < new DateTime(2026,11,01)
+            orderby p.Deadline
+            select new
+            {
+                ProjectName = p.Name,
+                p.Deadline,
+                leadName = e.Name   
+            };    
+
+        // For each employee, show their name and the total hours per week they're committed to across all their assignments (sum across possibly multiple projects).
+
+        var query13 = from e in employees
+            join a in assignments on e.Id equals a.EmployeeId 
+            group a.HoursPerWeek by e.Name into ep
+            select new
+            {
+                ep.Key,
+                TotalHoursPerWeek = ep.Sum()
+            };
+
+        // List each department along with the number of distinct projects its employees are involved in (via assignments). A department "touches" a project if any employee in that department has an assignment to it. (This is the hardest one — needs department → employee → assignment → project, with de-duplication.)
+
+        var query14 = from d in departments
+        join e in employees on d.Id equals e.DepartmentId
+        join a in assignments on e.Id equals a.EmployeeId
+        join p in projects on a.ProjectId equals p.Id
+        group p.Name by d.Name into da 
+        select new
+        {
+            department = da.Key,
+            projectsInvolved = da.Distinct().Count()
+        };
+
+
         System.Console.WriteLine("\n\n\n");
-        foreach (var item in query10)
+        foreach (var item in query14)
         {
             System.Console.WriteLine(item);
         }
