@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="AggregationLinq/AggregationLinq.csproj" />
   <Project Path="BasicLinq/BasicLinq.csproj" />
   <Project Path="CitiesCountryData/CitiesCountryData.csproj" />
   <Project Path="PracticeLINQ/PracticeLINQ.csproj" />
