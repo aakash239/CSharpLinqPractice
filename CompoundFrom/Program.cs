@@ -32,6 +32,44 @@ class CompoundFrom
         {
             Console.WriteLine($"{student.Last} Score: {student.score}");
         }
+
+        // --------------------------------------------
+        // --------------------------------------------
+        // --------------------------------------------
+
+        char[] upperCase = ['A', 'B', 'C'];
+        char[] lowerCase = ['x', 'y', 'z'];
+
+        IEnumerable<CharPair> joinQuery1 = 
+            from upper in upperCase
+            from lower in lowerCase
+            select new CharPair(upper, lower);
+
+        IEnumerable<CharPair> joinQuery2 = 
+            from lower in lowerCase
+            where lower != 'x'
+            from upper in upperCase
+            select new CharPair(upper, lower);
+
+        Console.WriteLine("Cross join:");
+        // Rest the mouse pointer on joinQuery1 to verify its type.
+        foreach (var pair in joinQuery1)
+        {
+            Console.WriteLine($"{pair.UpperCase} is matched to {pair.LowerCase}");
+        }
+
+        Console.WriteLine("Filtered non-equijoin:");
+        // Rest the mouse pointer over joinQuery2 to verify its type.
+        foreach (var pair in joinQuery2)
+        {
+            Console.WriteLine($"{pair.LowerCase} is matched to {pair.UpperCase}");
+        }
+        
+    }
+    class CharPair(char upperCase, char lowerCase)
+    {
+        public char UpperCase {get; set;} = upperCase;
+        public char LowerCase {get; set;} = lowerCase;
     }
 }
 
