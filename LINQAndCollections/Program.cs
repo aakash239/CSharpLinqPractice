@@ -66,6 +66,20 @@ class Program
             );
         OutputQueryResultsWhenList(queryNamesScores, "Display each student's name and exam score average.");
 
+                // A simple data source.
+        int[] numbers = [5, 4, 1, 3, 9, 8, 6, 7, 2, 0];
+
+        // Create the query.
+        // lowNums is an IEnumerable<int>
+        var lowNums = from num in numbers
+            where num < 5
+            select num + 10;
+
+        // Execute the query.
+        foreach (int i in lowNums)
+        {
+            Console.Write(i + " ");
+        }
         // How to query an ArrayList with LINQ
         // var query = from Student s in arrList ...
         // typecast arraylist object to Student for dynamic runtime
