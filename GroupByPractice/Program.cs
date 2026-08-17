@@ -35,12 +35,35 @@ class Program
         
         PrintBooleanQuery(booleanGroupQuery); // print the query
 
+        // Grouping by numeric range
+        var numericGroupQuery = 
+            from student in students
+            group student by ((int)student.Scores.Average())/10 into g
+            orderby g.Key
+            select g;
+
+        PrintNumericQuery(numericGroupQuery);
     }
     static void PrintBooleanQuery(IEnumerable<IGrouping<bool, Student>>  booleanGroupQuery)
     {
+        Console.WriteLine("\n\n\n");
         foreach (var studentGroup in booleanGroupQuery)
         {
             Console.WriteLine(studentGroup.Key == true ? "High averages" : "Low averages");
+            foreach (var student in studentGroup)
+            {
+                Console.WriteLine("   {0}, {1}:{2}", student.Last, student.First, student.Scores.Average());
+            }
+        }
+    }
+
+    static void PrintNumericQuery(IEnumerable<IGrouping<int, Student>> studentQuery)
+    {   
+        Console.WriteLine("\n\n\n");
+        foreach (var studentGroup in studentQuery)
+        {
+            int temp = studentGroup.Key * 10;
+            Console.WriteLine($"Students with an average between {temp} and {temp + 10}");
             foreach (var student in studentGroup)
             {
                 Console.WriteLine("   {0}, {1}:{2}", student.Last, student.First, student.Scores.Average());
