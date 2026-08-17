@@ -1,6 +1,4 @@
-﻿using System.Runtime.ConstrainedExecution;
-
-namespace LINQAndCollections;
+﻿namespace LINQAndCollections;
 
 class Program
 {
