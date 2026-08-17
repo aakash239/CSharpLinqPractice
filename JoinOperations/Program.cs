@@ -65,7 +65,7 @@ class Program
         );
         
         PrintIEnumerableQuery(leftjoinResult);
-        
+
         // Authors with no books should appear
         var authorBooks = authors.GroupJoin(
             books,
@@ -77,6 +77,16 @@ class Program
             (x, books) => new {Author = x.author.Name, BookName = books == null ? "No Books Written" : books.Title}
         );
         PrintIEnumerableQuery(authorBooks);
+
+        // self Joins
+        var bookPairs = books.Join(
+            books,
+            outerBook => outerBook.AuthorId,
+            InnerBook => InnerBook.AuthorId,
+            (outerBook, InnerBook) => new{outerBook, InnerBook}
+        ).Where(x => 
+        x.outerBook.Id < x.InnerBook.Id);
+        PrintIEnumerableQuery(bookPairs);
     }
 
     static void PrintIEnumerableQuery<T>(IEnumerable<T> query)
