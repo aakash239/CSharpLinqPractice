@@ -65,15 +65,16 @@ class Program
         );
         
         PrintIEnumerableQuery(leftjoinResult);
+        
         // Authors with no books should appear
         var authorBooks = authors.GroupJoin(
             books,
-            authors => authors.Id,
-            books => books.AuthorId,
-            (authors, bookGroup) => new{authors, bookGroup}
+            author => author.Id,
+            book => book.AuthorId,
+            (author, bookGroup) => new{author, bookGroup}
         ).SelectMany(
             x => x.bookGroup.DefaultIfEmpty(),
-            (x, books) => new {Author = x.authors.Name, BookName = books == null ? "No Books Written" : books.Title}
+            (x, books) => new {Author = x.author.Name, BookName = books == null ? "No Books Written" : books.Title}
         );
         PrintIEnumerableQuery(authorBooks);
     }
