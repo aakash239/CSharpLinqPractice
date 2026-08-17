@@ -3,6 +3,7 @@
   <Project Path="BasicLinq/BasicLinq.csproj" />
   <Project Path="CitiesCountryData/CitiesCountryData.csproj" />
   <Project Path="CompoundFrom/CompoundFrom.csproj" />
+  <Project Path="GroupByPractice/GroupByPractice.csproj" />
   <Project Path="LINQAndCollections/LINQAndCollections.csproj" />
   <Project Path="PracticeLINQ/PracticeLINQ.csproj" />
 </Solution>
