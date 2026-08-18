@@ -5,7 +5,7 @@ namespace JoinOperations;
 record Author(int Id, string Name, string Country);
 record Book(int Id, string Title, int AuthorId, int Year, string Genre);
 record Review(int BookId, string Reviewer, int Rating); // 1-5
-
+record Award(string Country, int Year, string AwardName);
 class Program
 {
     static readonly Author[] authors = [
@@ -36,6 +36,13 @@ class Program
         new Review(107, "Heidi", 5)
         // Book 104 and 108 have no reviews at all
     ];
+    static readonly Award[] awards = [
+    new Award("Japan", 1987, "Tanizaki Prize"),
+    new Award("Japan", 2002, "Yomiuri Prize"),
+    new Award("UK", 1989, "Booker Prize"),
+    new Award("Nigeria", 2013, "NLNG Prize"),
+    new Award("Chile", 1982, "Best of the Decade")
+];
     static void Main(string[] args)
     {
         // simple join in method Syntax
@@ -84,9 +91,15 @@ class Program
             outerBook => outerBook.AuthorId,
             InnerBook => InnerBook.AuthorId,
             (outerBook, InnerBook) => new{outerBook, InnerBook}
-        ).Where(x => 
-        x.outerBook.Id < x.InnerBook.Id);
+        ).Where(x => x.outerBook.Id < x.InnerBook.Id).Select(x => new {Author = x.InnerBook.AuthorId, Book1 = x.outerBook.Title, Book2 = x.InnerBook.Title});
         PrintIEnumerableQuery(bookPairs);
+    
+        var compositeJoins = books.Join(authors, book => book.AuthorId, author => author.Id, (x, y)=> new{x.Title, y.Country, x.Year}).Join(
+            awards,
+            book => new {book.Country, book.Year},
+            award => new {award.Country, award.Year},
+            (book, award) => new {book.Title, award.AwardName}
+        );
     }
 
     static void PrintIEnumerableQuery<T>(IEnumerable<T> query)
