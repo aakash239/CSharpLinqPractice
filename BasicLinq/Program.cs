@@ -32,6 +32,26 @@ class Program
         - switch up entirely to method syntax
         - mix both write the filtering part in query syntax and wrap the whloe thing in parenthesis and call .count() on the result
         */
+
+
+        List<Fruit> fruits = [
+            new Fruit("apple", 1),
+            new Fruit("mango", 3),
+            new Fruit("banana", 2)];
+        
+        var query = fruits.Select(x => x).OrderBy(x => x.name).Reverse();
+
+
+        foreach (var item in query)
+        {
+            System.Console.WriteLine(item.name);
+        }
     }
 
+}
+
+class Fruit(string name, int id)
+{
+    public string name {get; set;}= name ;
+    public int id {get; set;}= id;
 }
